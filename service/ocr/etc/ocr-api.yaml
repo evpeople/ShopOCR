@@ -1,0 +1,6 @@
+Name: ocr-api
+Host: 0.0.0.0
+Port: 8890
+Auth:
+  AccessSecret: 163f795f-d83d-4b3b-acab-525fa627d409
+  AccessExpire: 600

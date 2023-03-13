@@ -1,0 +1,22 @@
+type (
+	OcrReq
+	 {
+		Base64 string `json:"base64"`
+	}
+	Position{
+		X float64 `json:"x"`
+		Y float64 `json:"y"`
+	}
+	OcrReply {
+		Content          string  `json:"content"`
+		Confidence    float64 `json:"probability"`
+		Pos []Position `json:"pos"`
+	}
+)
+@server(
+	jwt: Auth
+)
+service ocr-api {
+	@handler  ocr
+	post /ocr (OcrReq) returns (OcrReply)
+}
