@@ -25,6 +25,13 @@ func NewOcrLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OcrLogic {
 
 func (l *OcrLogic) Ocr(req *types.OcrReq) (resp *types.OcrReply, err error) {
 	// todo: add your logic here and delete this line
+	reader := NewImageReader()
+	for {
+		img, err := reader.ReadImg()
+		if err != nil {
+			break
+		}
 
+	}
 	return
 }

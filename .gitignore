@@ -1,1 +1,5 @@
 pic/
+ocr/imgs/
+service/ocr/imgs/
+.DS_Store
+service/.DS_Store
