@@ -3,8 +3,8 @@ package handler
 import (
 	"net/http"
 
-	"github.com/evpeople/ShopOCR/service/ocr/api/internal/logic"
-	"github.com/evpeople/ShopOCR/service/ocr/api/internal/svc"
+	"github.com/evpeople/ShopOCR/service/search/api/internal/logic"
+	"github.com/evpeople/ShopOCR/service/search/api/internal/svc"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 

@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 
-	"github.com/evpeople/ShopOCR/service/ocr/api/internal/svc"
+	"github.com/evpeople/ShopOCR/service/search/api/internal/svc"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 

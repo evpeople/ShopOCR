@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/evpeople/ShopOCR/service/ocr/api/internal/config"
-	"github.com/evpeople/ShopOCR/service/ocr/api/internal/handler"
-	"github.com/evpeople/ShopOCR/service/ocr/api/internal/svc"
+	"github.com/evpeople/ShopOCR/service/search/api/internal/config"
+	"github.com/evpeople/ShopOCR/service/search/api/internal/handler"
+	"github.com/evpeople/ShopOCR/service/search/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"

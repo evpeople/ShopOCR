@@ -1,7 +1,7 @@
 package svc
 
 import (
-	"github.com/evpeople/ShopOCR/service/ocr/api/internal/config"
+	"github.com/evpeople/ShopOCR/service/search/api/internal/config"
 	"github.com/evpeople/ShopOCR/service/user/rpc/userclient"
 
 	"github.com/zeromicro/go-zero/zrpc"
