@@ -50,19 +50,19 @@ func (l *OcrLogic) Ocr(req *types.OcrReq) (resp *types.OcrReply, err error) {
 }
 
 type Payload struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
+	Key   []string `json:"key"`
+	Value []string `json:"value"`
 }
 
 func callOCR(key, value string) {
-	payload := Payload{key, value}
+	payload := Payload{[]string{key}, []string{value}}
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
 		panic(err)
 	}
 
 	// 创建 POST 请求
-	url := "http://23.96.67.210:9998/ocr/prediction"
+	url := "http://127.0.0.1:9998/ocr/prediction"
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonPayload))
 	if err != nil {
 		panic(err)
