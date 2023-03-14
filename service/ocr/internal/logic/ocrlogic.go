@@ -4,8 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/evpeople/ShopOCR/service/ocr/internal/svc"
@@ -20,6 +19,8 @@ type OcrLogic struct {
 	svcCtx *svc.ServiceContext
 }
 
+var c chan string
+
 func NewOcrLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OcrLogic {
 	return &OcrLogic{
 		Logger: logx.WithContext(ctx),
@@ -30,16 +31,22 @@ func NewOcrLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OcrLogic {
 
 func (l *OcrLogic) Ocr(req *types.OcrReq) (resp *types.OcrReply, err error) {
 	// todo: add your logic here and delete this line
+	logx.Infof("begin OCR:") // 这里的key和生成jwt token时传入的key一致
 	reader := NewImageReader()
-	for {
-		img, err := reader.ReadImg()
-		if err != nil {
-			break
-		}
-		callOCR("image", img)
-		//TODO： 	修改架构，调用另一个python写的RPC，然后这个python的 PRC调用百度的OCR
+	img, err := reader.ReadImg()
+	logx.Infof("read one img") // 这里的key和生成jwt token时传入的key一致
+	logx.Info(img[:30])
+	if err != nil {
+		return nil, err
 	}
-	return
+	logx.Infof("call OCR") // 这里的key和生成jwt token时传入的key一致
+	c = make(chan string)
+
+	go callOCR("image", img)
+	// logx.Info(<-c)
+
+	//TODO： 	修改架构，调用另一个python写的RPC，然后这个python的 PRC调用百度的OCR
+	return &types.OcrReply{Content: <-c, Confidence: 0.32, Pos: nil}, nil
 }
 
 type Payload struct {
@@ -55,7 +62,7 @@ func callOCR(key, value string) {
 	}
 
 	// 创建 POST 请求
-	url := "https://example.com/api"
+	url := "http://23.96.67.210:9998/ocr/prediction"
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonPayload))
 	if err != nil {
 		panic(err)
@@ -73,10 +80,12 @@ func callOCR(key, value string) {
 	defer resp.Body.Close()
 
 	// 读取响应体
-	body, err := ioutil.ReadAll(resp.Body)
+	// body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		panic(err)
 	}
+	logx.Infof("userId: %v", string(body)) // 这里的key和生成jwt token时传入的key一致
 
-	fmt.Println(string(body))
+	c <- string(body)
 }
