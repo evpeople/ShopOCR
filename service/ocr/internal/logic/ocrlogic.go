@@ -62,7 +62,7 @@ func callOCR(key, value string) {
 	}
 
 	// 创建 POST 请求
-	url := "http://23.96.67.210:9998/ocr/prediction"
+	url := "http://10.112.190.134:9998/ocr/prediction"
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonPayload))
 	if err != nil {
 		panic(err)
