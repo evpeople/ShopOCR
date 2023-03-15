@@ -50,12 +50,12 @@ func (l *OcrLogic) Ocr(req *types.OcrReq) (resp *types.OcrReply, err error) {
 }
 
 type Payload struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
+	Key   []string `json:"key"`
+	Value []string `json:"value"`
 }
 
 func callOCR(key, value string) {
-	payload := Payload{key, value}
+	payload := Payload{[]string{key}, []string{value}}
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
 		panic(err)
