@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/evpeople/ShopOCR/common/errorx"
 	"github.com/evpeople/ShopOCR/service/ocr/api/internal/svc"
 	"github.com/evpeople/ShopOCR/service/ocr/api/internal/types"
 
@@ -38,7 +39,7 @@ func (l *OcrLogic) Ocr(req *types.OcrReq) (resp *types.OcrReply, err error) {
 	logx.Infof("read one img") // 这里的key和生成jwt token时传入的key一致
 	logx.Info(img[:30])
 	if err != nil {
-		return nil, err
+		errorx.NewDefaultError(err.Error())
 	}
 	logx.Infof("call OCR") // 这里的key和生成jwt token时传入的key一致
 	c = make(chan string)
@@ -56,7 +57,7 @@ func (l *OcrLogic) Ocr(req *types.OcrReq) (resp *types.OcrReply, err error) {
 	var r Reply
 	err = json.Unmarshal([]byte(reply), &r)
 	if err != nil {
-		fmt.Println("Failed to unmarshal json:", err)
+		errorx.NewDefaultError(err.Error())
 		return
 	}
 	// reply is
@@ -76,14 +77,14 @@ func callOCR(key, value string) {
 	payload := Payload{[]string{key}, []string{value}}
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
-		panic(err)
+		errorx.NewDefaultError(err.Error())
 	}
 
 	// 创建 POST 请求
 	url := "http://10.112.190.134:9998/ocr/prediction"
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonPayload))
 	if err != nil {
-		panic(err)
+		errorx.NewDefaultError(err.Error())
 	}
 
 	// 设置请求头
@@ -93,7 +94,7 @@ func callOCR(key, value string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		errorx.NewDefaultError(err.Error())
 	}
 	defer resp.Body.Close()
 
@@ -101,7 +102,7 @@ func callOCR(key, value string) {
 	// body, err := ioutil.ReadAll(resp.Body)
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		panic(err)
+		errorx.NewDefaultError(err.Error())
 	}
 	logx.Infof("userId: %v", string(body)) // 这里的key和生成jwt token时传入的key一致
 

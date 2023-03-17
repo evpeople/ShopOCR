@@ -1,12 +1,12 @@
 package logic
 
 import (
-	"errors"
 	"fmt"
 	"sort"
 	"strconv"
 	"strings"
 
+	"github.com/evpeople/ShopOCR/common/errorx"
 	"github.com/evpeople/ShopOCR/service/ocr/api/internal/types"
 )
 
@@ -22,7 +22,7 @@ func findMatchingBrackets(data string, symbolBegin, symbolEnd rune) ([][]int, er
 			stack = append(stack, i)
 		} else if char == symbolEnd {
 			if len(stack) == 0 {
-				return nil, errors.New("unmatched bracket")
+				return nil, errorx.NewDefaultError("unmatched bracket")
 			}
 			openIndex := stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
@@ -31,7 +31,7 @@ func findMatchingBrackets(data string, symbolBegin, symbolEnd rune) ([][]int, er
 	}
 
 	if len(stack) > 0 {
-		return nil, errors.New("unmatched bracket")
+		return nil, errorx.NewDefaultError("unmatched bracket")
 	}
 	sort.Slice(pairs, func(i, j int) bool {
 		return pairs[i][0] < pairs[j][0]
@@ -41,15 +41,15 @@ func findMatchingBrackets(data string, symbolBegin, symbolEnd rune) ([][]int, er
 func buildReply(data string) (replies []types.SingleOcrReply) {
 	pairs, err := findMatchingBrackets(data, '(', ')')
 	if err != nil {
-		fmt.Println(err)
+		errorx.NewDefaultError(err.Error())
 	}
 	pairs2, err := findMatchingBrackets(data, '[', ']')
 	if err != nil {
-		fmt.Println(err)
+		errorx.NewDefaultError(err.Error())
 	}
 	contents, confidences, err := buildMsg(data, pairs)
 	if err != nil {
-		fmt.Println(err)
+		errorx.NewDefaultError(err.Error())
 	}
 	poses := buildPos(data, pairs2)
 	for i := 0; i < len(confidences); i++ {
@@ -66,7 +66,7 @@ func buildMsg(data string, pairs [][]int) (content []string, confidence []float6
 		tmpConfidence, err2 := strconv.ParseFloat(values[1], 64)
 		confidence = append(confidence, tmpConfidence)
 		if err2 != nil {
-			fmt.Println(err2)
+			errorx.NewDefaultError(err2.Error())
 			err = err2
 			return
 		}
@@ -92,12 +92,12 @@ func buildPos(data string, pairs [][]int) [][]types.Position {
 			xy := strings.Split(values, ",")
 			x, err := strconv.ParseFloat(xy[0], 64)
 			if err != nil {
-				fmt.Println(err)
+				errorx.NewDefaultError(err.Error())
 			}
 			xy[1] = strings.Trim(xy[1], " ")
 			y, err := strconv.ParseFloat(xy[1], 64)
 			if err != nil {
-				fmt.Println(err)
+				errorx.NewDefaultError(err.Error())
 			}
 			pos.X = x
 			pos.Y = y

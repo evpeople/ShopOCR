@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/evpeople/ShopOCR/common/errorx"
 	"github.com/evpeople/ShopOCR/service/search/api/internal/svc"
 	"github.com/evpeople/ShopOCR/service/search/api/internal/types"
 	"github.com/evpeople/ShopOCR/service/user/rpc/types/user"
@@ -31,7 +32,7 @@ func (l *SearchLogic) Search(req *types.SearchReq) (*types.SearchReply, error) {
 	logx.Infof("userId: %s", userIdNumber)
 	userId, err := userIdNumber.Int64()
 	if err != nil {
-		return nil, err
+		return nil, errorx.NewDefaultError("userId error")
 	}
 
 	// 使用user rpc
@@ -39,7 +40,7 @@ func (l *SearchLogic) Search(req *types.SearchReq) (*types.SearchReply, error) {
 		Id: userId,
 	})
 	if err != nil {
-		return nil, err
+		return nil, errorx.NewDefaultError(err.Error())
 	}
 
 	return &types.SearchReply{
