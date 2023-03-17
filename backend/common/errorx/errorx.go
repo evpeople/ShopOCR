@@ -16,6 +16,7 @@ func NewCodeError(code int, msg string) error {
 	return &CodeError{Code: code, Msg: msg}
 }
 
+// NewDefaultError creates a new default error with the provided message.
 func NewDefaultError(msg string) error {
 	return NewCodeError(defaultCode, msg)
 }
