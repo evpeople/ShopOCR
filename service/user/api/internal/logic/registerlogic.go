@@ -34,7 +34,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 	_, err = l.svcCtx.UserModel.FindOneByName(l.ctx, req.Username)
 	if err != model.ErrNotFound {
-		return nil, errorx.NewDefaultError("用户名已存在")
+		return nil, errorx.NewDefaultError("用户名已存在/ 或者还没建表")
 	}
 	userinfo, err := l.svcCtx.UserModel.Insert(l.ctx, &model.User{Name: req.Username, Password: req.Password})
 	if err != nil {

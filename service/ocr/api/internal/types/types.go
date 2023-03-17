@@ -10,8 +10,14 @@ type Position struct {
 	Y float64 `json:"y"`
 }
 
-type OcrReply struct {
+type SingleOcrReply struct {
 	Content    string     `json:"content"`
 	Confidence float64    `json:"probability"`
 	Pos        []Position `json:"pos"`
+}
+
+type OcrReply struct {
+	Code    int              `json:"code"`
+	Msg     string           `json:"msg"`
+	Replies []SingleOcrReply `json:"Replies"`
 }

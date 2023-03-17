@@ -1,0 +1,109 @@
+package logic
+
+import (
+	"errors"
+	"fmt"
+	"sort"
+	"strconv"
+	"strings"
+
+	"github.com/evpeople/ShopOCR/service/ocr/api/internal/types"
+)
+
+type OneData [4][2]int
+
+func findMatchingBrackets(data string, symbolBegin, symbolEnd rune) ([][]int, error) {
+
+	var stack []int
+	var pairs [][]int
+
+	for i, char := range data {
+		if char == symbolBegin {
+			stack = append(stack, i)
+		} else if char == symbolEnd {
+			if len(stack) == 0 {
+				return nil, errors.New("unmatched bracket")
+			}
+			openIndex := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			pairs = append(pairs, []int{openIndex, i})
+		}
+	}
+
+	if len(stack) > 0 {
+		return nil, errors.New("unmatched bracket")
+	}
+	sort.Slice(pairs, func(i, j int) bool {
+		return pairs[i][0] < pairs[j][0]
+	})
+	return pairs, nil
+}
+func buildReply(data string) (replies []types.SingleOcrReply) {
+	pairs, err := findMatchingBrackets(data, '(', ')')
+	if err != nil {
+		fmt.Println(err)
+	}
+	pairs2, err := findMatchingBrackets(data, '[', ']')
+	if err != nil {
+		fmt.Println(err)
+	}
+	contents, confidences, err := buildMsg(data, pairs)
+	if err != nil {
+		fmt.Println(err)
+	}
+	poses := buildPos(data, pairs2)
+	for i := 0; i < len(confidences); i++ {
+		replies = append(replies, types.SingleOcrReply{Confidence: confidences[i], Content: contents[i], Pos: poses[i]})
+	}
+	return replies
+}
+func buildMsg(data string, pairs [][]int) (content []string, confidence []float64, err error) {
+	for i := 0; i < len(pairs); i++ {
+		originValue := fmt.Sprint(data[pairs[i][0]+1 : pairs[i][1]])
+		values := strings.Split(originValue, ",")
+		content = append(content, values[0])
+		values[1] = strings.Trim(values[1], " ")
+		tmpConfidence, err2 := strconv.ParseFloat(values[1], 64)
+		confidence = append(confidence, tmpConfidence)
+		if err2 != nil {
+			fmt.Println(err2)
+			err = err2
+			return
+		}
+	}
+	return
+}
+func buildPos(data string, pairs [][]int) [][]types.Position {
+
+	pairs = pairs[1:]
+	pS := len(pairs) / 6
+	oneDatas := make([]OneData, pS)
+	for i := 0; i < pS; i++ {
+		oneDatas[i] = OneData{
+			[2]int{pairs[i*6+2][0], pairs[i*6+2][1]}, [2]int{pairs[i*6+3][0], pairs[i*6+3][1]},
+			[2]int{pairs[i*6+4][0], pairs[i*6+4][1]}, [2]int{pairs[i*6+5][0], pairs[i*6+5][1]}}
+	}
+	var ans [][]types.Position
+	for i := 0; i < pS; i++ {
+		var poses []types.Position
+		for i := 0; i < 4; i++ {
+			var pos types.Position
+			values := fmt.Sprint(data[oneDatas[0][i][0]+1 : oneDatas[0][i][1]])
+			xy := strings.Split(values, ",")
+			x, err := strconv.ParseFloat(xy[0], 64)
+			if err != nil {
+				fmt.Println(err)
+			}
+			xy[1] = strings.Trim(xy[1], " ")
+			y, err := strconv.ParseFloat(xy[1], 64)
+			if err != nil {
+				fmt.Println(err)
+			}
+			pos.X = x
+			pos.Y = y
+			poses = append(poses, pos)
+		}
+		ans = append(ans, poses)
+	}
+	return ans
+}

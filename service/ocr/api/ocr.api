@@ -7,10 +7,15 @@ type (
 		X float64 `json:"x"`
 		Y float64 `json:"y"`
 	}
-	OcrReply {
+	SingleOcrReply {
 		Content          string  `json:"content"`
 		Confidence    float64 `json:"probability"`
 		Pos []Position `json:"pos"`
+	}
+	OcrReply{
+		Code int `json:"code"`
+		Msg string `json:"msg"`
+		Replies []SingleOcrReply `json:"Replies"`
 	}
 )
 @server(
