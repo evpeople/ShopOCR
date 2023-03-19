@@ -1,9 +1,9 @@
-import axios2 from '../utils/axios/axiosUser';
+import axiosUser from '../utils/axios/axiosUser';
 
 
 class AuthService {
   login(user) {
-    return axios2
+    return axiosUser
         .post('login', {username: user.username, password: user.password})
         .then(response => {
           if (response.data.accessToken) {
@@ -19,7 +19,7 @@ class AuthService {
   }
 
   register(user) {
-    return axios2.post(
+    return axiosUser.post(
         'register',
         {username: user.username, email: user.email, password: user.password});
   }
