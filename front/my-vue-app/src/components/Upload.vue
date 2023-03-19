@@ -6,14 +6,15 @@
 </template>
 
 <script>
-import axios from 'axios'
 
+import OCRService from "../services/ocr.service"
 export default {
   data() {
     return {
       file: null
     }
   },
+  
   methods: {
     handleFileInputChange(event) {
       this.file = event.target.files[0]
@@ -33,13 +34,9 @@ export default {
     async uploadFile() {
       try {
         const base64Data = await this.encodeFileToBase64(this.file)
-
-        const response = await axios.post('/api/upload', {
-          fileName: this.file.name,
-          fileType: this.file.type,
-          data: base64Data
+        const response = await OCRService.postImageData({
+          base64: base64Data
         })
-
         console.log(response.data)
       } catch (error) {
         console.error('上传文件失败', error)

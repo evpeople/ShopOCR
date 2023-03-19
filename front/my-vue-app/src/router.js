@@ -9,6 +9,7 @@ const Profile = () => import('./components/Profile.vue')
 const BoardAdmin = () => import('./components/BoardAdmin.vue')
 const BoardModerator = () => import('./components/BoardModerator.vue')
 const BoardUser = () => import('./components/BoardUser.vue')
+const Upload = () => import('./components/Upload.vue')
 
 const routes = [
   {
@@ -23,6 +24,12 @@ const routes = [
   {
     path: '/login',
     component: Login,
+  },
+  {
+    path: '/upload',
+    name: 'upload',
+    // lazy-loaded
+    component: Upload,
   },
   {
     path: '/register',

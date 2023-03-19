@@ -31,15 +31,9 @@ func NewOcrLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OcrLogic {
 }
 
 func (l *OcrLogic) Ocr(req *types.OcrReq) (resp *types.OcrReply, err error) {
-	reader := NewImageReader()
-	img, err := reader.ReadImg()
-	if err != nil {
-		errorx.NewDefaultError(err.Error())
-	}
 	c = make(chan string)
 
-	go callOCR("image", img)
-	// logx.Info(<-c)
+	go callOCR("image", req.Base64)
 	reply := <-c
 	type Reply struct {
 		Err_no  int      `json:"err_no"`
