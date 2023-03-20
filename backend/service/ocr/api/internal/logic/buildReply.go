@@ -90,11 +90,11 @@ func buildPos(data string, pairs [][]int) [][]types.Position {
 			[2]int{pairs[i*6+4][0], pairs[i*6+4][1]}, [2]int{pairs[i*6+5][0], pairs[i*6+5][1]}}
 	}
 	var ans [][]types.Position
-	for i := 0; i < pS; i++ {
+	for j := 0; j < pS; j++ {
 		var poses []types.Position
 		for i := 0; i < 4; i++ {
 			var pos types.Position
-			values := fmt.Sprint(data[AllPairData[0][i][0]+1 : AllPairData[0][i][1]])
+			values := fmt.Sprint(data[AllPairData[j][i][0]+1 : AllPairData[j][i][1]])
 			xy := strings.Split(values, ",")
 			x, err := strconv.ParseFloat(xy[0], 64)
 			if err != nil {

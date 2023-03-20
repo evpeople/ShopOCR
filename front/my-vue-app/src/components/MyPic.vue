@@ -10,13 +10,59 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, nextTick, onUpdated } from 'vue'
-import { string } from 'yup'
+interface Pos{
+	  x: number
+  y: number
+}
+interface Reply{
+  content: string
+  probability: number
+  pos: Array<Pos> 
+}
 export default defineComponent({
     name: 'MyPic',
 	props: {
 		imageSB:String,
+		replies:Array<Reply>
 	},
-    setup(props) {
+	setup(props) {
+		const draw = (props) => { 
+			nextTick(() => {
+			var canvas:any = document.getElementById("canvas");  
+			var ctx=canvas.getContext("2d")
+			const img = new Image()
+			img.onload = function () {
+				canvas.width = img.width
+				canvas.height = img.height
+				ctx.drawImage(img, 0, 0)//绘制图片
+				console.log("image onload");
+// 绘制红框
+				props.replies.forEach((reply: Reply) => {
+					console.log(reply);
+					
+					ctx.beginPath();
+					ctx.strokeStyle = "red";
+					ctx.lineWidth = 1;
+					ctx.moveTo(reply.pos[0].x, reply.pos[0].y);
+					console.log(reply.pos[0].x, reply.pos[0].y);
+					
+					for (let i = 1; i < reply.pos.length; i++) {
+						ctx.lineTo(reply.pos[i].x, reply.pos[i].y);
+					}
+					ctx.closePath();
+					ctx.stroke();
+					ctx.fillStyle = "red";
+					ctx.font = "15px Arial";
+					ctx.fillText(reply.content, reply.pos[0].x, reply.pos[0].y);
+					ctx.fillText(reply.probability, reply.pos[1].x, reply.pos[1].y);
+
+				});
+			}
+			if (props.imageSB!=undefined) {
+				img.src = props.imageSB;
+			}
+			})
+		}
         // 创建canvas动画
 //         const oninitCanvas = (img: HTMLImageElement) => {
 //             nextTick(() => {
@@ -40,41 +86,12 @@ export default defineComponent({
 //             })
 //         }
 		onUpdated(() => {
-			console.log("onUpdated");
-			var canvas: any = document.getElementById("canvas");
-			var ctx = canvas.getContext("2d")
-			const img = new Image()
-			img.onload = function () {
-				canvas.width = img.width
-				canvas.height = img.height
-				ctx.drawImage(img, 0, 0)//绘制图片
-				console.log("image onload");
-				// 绘制红框
-				ctx.strokeStyle = 'red';
-				ctx.lineWidth = 3;
-				ctx.strokeRect(100, 200, 200, 400);
-			}
-			if (props.imageSB!=undefined) {
-				img.src = props.imageSB;
-			}
+			
+			draw(props)
 		}),
-		onMounted(() => {
-			var canvas:any = document.getElementById("canvas");  
-			var ctx=canvas.getContext("2d")
-			const img = new Image()
-			img.onload = function () {
-				canvas.width = img.width
-				canvas.height = img.height
-				ctx.drawImage(img, 0, 0)//绘制图片
-				console.log("image onload");
-// 绘制红框
-				ctx.strokeStyle = 'red';
-				ctx.lineWidth = 3;
-				ctx.strokeRect(100, 200, 200, 400);
-			}
-			if (props.imageSB!=undefined) {
-				img.src = props.imageSB;
-			}
+			onMounted(() => {
+			
+			draw(props)
         })
     }
 })

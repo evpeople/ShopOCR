@@ -3,7 +3,7 @@
     <input type="file" ref="fileInput" @change="handleFileInputChange">
     <button @click="uploadFile">上传文件</button>
     <img id="my-img" v-if="imageUrl" :src="imageUrl" alt="上传的图片">
-    <my-pic v-if="imageUrl" :image-s-b="imageUrl"></my-pic>
+    <my-pic v-if="replies" :image-s-b="imageUrl" :replies="replies"></my-pic>
   </div>
 </template>
 
@@ -19,6 +19,7 @@ export default {
     return {
       file: null,
       imageUrl:null,
+      replies:null
     }
   },
   methods: {
@@ -50,6 +51,7 @@ export default {
         })
         console.log(JSON.stringify(response.data))
         console.log(response.data)
+        this.replies=response.data.Replies
       } catch (error) {
         console.error('上传文件失败', error)
       }

@@ -31,31 +31,32 @@ func NewOcrLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OcrLogic {
 }
 
 func (l *OcrLogic) Ocr(req *types.OcrReq) (resp *types.OcrReply, err error) {
-	// c = make(chan string)
+	c = make(chan string)
 
-	// go callOCR("image", req.Base64)
-	// reply := <-c
-	// type Reply struct {
-	// 	Err_no  int      `json:"err_no"`
-	// 	Err_msg string   `json:"err_msg"`
-	// 	Key     []string `json:"key"`
-	// 	Value   []string `json:"value"`
-	// }
-	// var r Reply
-	// err = json.Unmarshal([]byte(reply), &r)
-	// if err != nil {
-	// 	errorx.NewDefaultError(err.Error())
-	// 	return
-	// }
-	// replies := buildReply(r.Value[0])
-	// return &types.OcrReply{Code: 0, Msg: "", Replies: replies}, nil
-	var rep types.OcrReply
-	reply := `{"code":0,"msg":"","Replies":[{"content":"'The predicted text is :'","probability":0.9702153,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'上海斯格威铂尔-大酒店'","probability":0.9144976,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'0.870167'","probability":0.80206037,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'打浦路15号'","probability":0.88724154,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'0.959863'","probability":0.99456096,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'3'","probability":0.9988158,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'绿洲仕格维花园公寓'","probability":0.9155753,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'score:'","probability":0.9378295,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'订浦路252935号'","probability":0.9224631,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'score:'","probability":0.93276596,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'0.969589'","probability":0.99349326,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'花费70.221455秒'","probability":0.8710235,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]}]}`
-	err = json.Unmarshal([]byte(reply), &rep)
-	if err != nil {
-		panic(err)
+	go callOCR("image", req.Base64)
+	reply := <-c
+
+	type Reply struct {
+		Err_no  int      `json:"err_no"`
+		Err_msg string   `json:"err_msg"`
+		Key     []string `json:"key"`
+		Value   []string `json:"value"`
 	}
-	return &rep, nil
+	var r Reply
+	err = json.Unmarshal([]byte(reply), &r)
+	if err != nil {
+		errorx.NewDefaultError(err.Error())
+		return
+	}
+	replies := buildReply(r.Value[0])
+	return &types.OcrReply{Code: 0, Msg: "", Replies: replies}, nil
+	// var rep types.OcrReply
+	// reply := `{"code":0,"msg":"","Replies":[{"content":"'The predicted text is :'","probability":0.9702153,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'上海斯格威铂尔-大酒店'","probability":0.9144976,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'0.870167'","probability":0.80206037,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'打浦路15号'","probability":0.88724154,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'0.959863'","probability":0.99456096,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'3'","probability":0.9988158,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'绿洲仕格维花园公寓'","probability":0.9155753,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'score:'","probability":0.9378295,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'订浦路252935号'","probability":0.9224631,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'score:'","probability":0.93276596,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'0.969589'","probability":0.99349326,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]},{"content":"'花费70.221455秒'","probability":0.8710235,"pos":[{"x":4,"y":6},{"x":186,"y":6},{"x":186,"y":18},{"x":4,"y":18}]}]}`
+	// err = json.Unmarshal([]byte(reply), &rep)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// return &rep, nil
 }
 
 type Payload struct {
