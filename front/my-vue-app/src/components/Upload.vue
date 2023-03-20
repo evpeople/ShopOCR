@@ -3,9 +3,7 @@
     <input type="file" ref="fileInput" @change="handleFileInputChange">
     <button @click="uploadFile">上传文件</button>
     <img id="my-img" v-if="imageUrl" :src="imageUrl" alt="上传的图片">
-  <div>
     <my-pic v-if="imageUrl" :image-s-b="imageUrl"></my-pic>
-  </div>
   </div>
 </template>
 

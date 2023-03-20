@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, nextTick } from 'vue'
+import { defineComponent, onMounted, nextTick, onUpdated } from 'vue'
 import { string } from 'yup'
 export default defineComponent({
     name: 'MyPic',
@@ -39,6 +39,25 @@ export default defineComponent({
 //               draw()
 //             })
 //         }
+		onUpdated(() => {
+			console.log("onUpdated");
+			var canvas: any = document.getElementById("canvas");
+			var ctx = canvas.getContext("2d")
+			const img = new Image()
+			img.onload = function () {
+				canvas.width = img.width
+				canvas.height = img.height
+				ctx.drawImage(img, 0, 0)//绘制图片
+				console.log("image onload");
+				// 绘制红框
+				ctx.strokeStyle = 'red';
+				ctx.lineWidth = 3;
+				ctx.strokeRect(100, 200, 200, 400);
+			}
+			if (props.imageSB!=undefined) {
+				img.src = props.imageSB;
+			}
+		}),
 		onMounted(() => {
 			var canvas:any = document.getElementById("canvas");  
 			var ctx=canvas.getContext("2d")
