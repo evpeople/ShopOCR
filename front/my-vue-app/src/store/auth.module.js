@@ -1,8 +1,27 @@
 import AuthService from '../services/auth.server';
 
+// const user = JSON.parse(localStorage.getItem('user'));
+// const initialState = user ? {status: {loggedIn: true}, user} :
+//                             {status: {loggedIn: false}, user: null};
+
 const user = JSON.parse(localStorage.getItem('user'));
-const initialState = user ? {status: {loggedIn: true}, user} :
-                            {status: {loggedIn: false}, user: null};
+
+let userState = {};
+
+if (user) {
+  userState = {
+    name: user.name,
+    id: user.id,
+    accessToken: user.accessToken,
+    accessExpire: user.accessExpire,
+    refreshExpire: user.refreshExpire
+  };
+}
+
+const initialState = {
+  status: {loggedIn: userState.accessExpire > Date.now()},
+  user: userState
+};
 
 export const auth = {
   namespaced: true,

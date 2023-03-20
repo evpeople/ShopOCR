@@ -2,6 +2,7 @@
   <div>
     <input type="file" ref="fileInput" @change="handleFileInputChange">
     <button @click="uploadFile">上传文件</button>
+    <img v-if="imageUrl" :src="imageUrl" alt="上传的图片">
   </div>
 </template>
 
@@ -11,13 +12,19 @@ import OCRService from "../services/ocr.service"
 export default {
   data() {
     return {
-      file: null
+      file: null,
+      imageUrl:null
     }
   },
   
   methods: {
     handleFileInputChange(event) {
       this.file = event.target.files[0]
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageUrl = reader.result;
+      };
+      reader.readAsDataURL(this.file);
     },
     encodeFileToBase64(file) {
       return new Promise((resolve, reject) => {
@@ -37,7 +44,7 @@ export default {
         const response = await OCRService.postImageData({
           base64: base64Data
         })
-        console.log(response.data)
+        console.log(JSON.stringify(response.data))
       } catch (error) {
         console.error('上传文件失败', error)
       }

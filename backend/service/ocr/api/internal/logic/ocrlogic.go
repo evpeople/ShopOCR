@@ -86,7 +86,7 @@ func callOCR(key, value string) {
 	if err != nil {
 		errorx.NewDefaultError(err.Error())
 	}
-	logx.Infof("userId: %v", string(body))
+//	logx.Infof("userId: %v", string(body))
 
 	c <- string(body)
 }

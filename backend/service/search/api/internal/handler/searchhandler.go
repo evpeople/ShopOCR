@@ -16,7 +16,6 @@ func searchHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
-
 		l := logic.NewSearchLogic(r.Context(), svcCtx)
 		resp, err := l.Search(&req)
 		if err != nil {
