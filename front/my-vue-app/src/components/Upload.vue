@@ -2,21 +2,27 @@
   <div>
     <input type="file" ref="fileInput" @change="handleFileInputChange">
     <button @click="uploadFile">上传文件</button>
-    <img v-if="imageUrl" :src="imageUrl" alt="上传的图片">
+    <img id="my-img" v-if="imageUrl" :src="imageUrl" alt="上传的图片">
+  <div>
+    <my-pic v-if="imageUrl" :image-s-b="imageUrl"></my-pic>
+  </div>
   </div>
 </template>
 
 <script>
 
 import OCRService from "../services/ocr.service"
+import  MyPic from "./MyPic.vue";
 export default {
+  components: {
+    MyPic
+  },
   data() {
     return {
       file: null,
-      imageUrl:null
+      imageUrl:null,
     }
   },
-  
   methods: {
     handleFileInputChange(event) {
       this.file = event.target.files[0]
@@ -45,10 +51,11 @@ export default {
           base64: base64Data
         })
         console.log(JSON.stringify(response.data))
+        console.log(response.data)
       } catch (error) {
         console.error('上传文件失败', error)
       }
-    }
-  }
+    },
+  },
 }
 </script>
