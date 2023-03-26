@@ -8,6 +8,7 @@ import (
 
 	"github.com/evpeople/ShopOCR/common/errorx"
 	"github.com/evpeople/ShopOCR/service/ocr/api/internal/types"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PairData [4][2]int
@@ -17,7 +18,7 @@ func findMatchingBrackets(data string, symbolBegin, symbolEnd rune) ([][]int, er
 
 	var stack []int
 	var pairs [][]int
-
+	// logx.Info(data)
 	for i, char := range data {
 		if char == symbolBegin {
 			stack = append(stack, i)
@@ -41,15 +42,17 @@ func findMatchingBrackets(data string, symbolBegin, symbolEnd rune) ([][]int, er
 }
 func buildReply(data string) (replies []types.SingleOcrReply) {
 	// pairs1 和 pairs2 分别是两个括号的配对的序列
-	pairs, err := findMatchingBrackets(data, '(', ')')
-	if err != nil {
-		errorx.NewDefaultError(err.Error())
-	}
+	logx.Info(data)
 	pairs2, err := findMatchingBrackets(data, '[', ']')
+	logx.Info("pairs 2", pairs2)
 	if err != nil {
 		errorx.NewDefaultError(err.Error())
 	}
-
+	pairs, err := findMatchingBrackets(data, '(', ')')
+	logx.Info("pairs 1", pairs)
+	if err != nil {
+		errorx.NewDefaultError(err.Error())
+	}
 	// 构造识别出的内容和可信度
 	contents, confidences, err := buildMsg(data, pairs)
 	if err != nil {
@@ -80,7 +83,6 @@ func buildMsg(data string, pairs [][]int) (content []string, confidence []float6
 	return
 }
 func buildPos(data string, pairs [][]int) [][]types.Position {
-
 	pairs = pairs[1:]
 	pS := len(pairs) / 6
 	AllPairData := make([]PairData, pS)

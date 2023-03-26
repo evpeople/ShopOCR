@@ -5,8 +5,10 @@ import authHeader from './auth-header';
 
 class OCRService {
   postImageData(data) {
+    return axiosOCR.post('/', data, {headers: authHeader()});
+  }
+  postImageURL(data) {
     console.log(authHeader())
-    console.log('dsadas')
     return axiosOCR.post('/', data, {headers: authHeader()});
   }
 }

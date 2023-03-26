@@ -2,6 +2,7 @@ type (
 	OcrReq
 	 {
 		Base64 string `json:"base64"`
+		Url string `json:"url"`
 	}
 	Position{
 		X float64 `json:"x"`

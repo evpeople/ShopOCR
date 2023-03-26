@@ -3,6 +3,7 @@ package logic
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -31,9 +32,24 @@ func NewOcrLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OcrLogic {
 }
 
 func (l *OcrLogic) Ocr(req *types.OcrReq) (resp *types.OcrReply, err error) {
+	var encoded string
+	if req.Url != "" {
+		resp2, err := http.Get(req.Url)
+		if err != nil {
+			panic(err)
+		}
+		defer resp2.Body.Close()
+		data, err := io.ReadAll(resp2.Body)
+		if err != nil {
+			panic(err)
+		}
+		encoded = base64.StdEncoding.EncodeToString(data)
+	} else {
+		encoded = req.Base64
+	}
 	c = make(chan string)
-
-	go callOCR("image", req.Base64)
+	// logx.Info(encoded)
+	go callOCR("image", encoded)
 	reply := <-c
 
 	type Reply struct {

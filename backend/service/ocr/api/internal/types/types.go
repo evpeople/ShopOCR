@@ -3,6 +3,7 @@ package types
 
 type OcrReq struct {
 	Base64 string `json:"base64"`
+	Url    string `json:"url"`
 }
 
 type Position struct {

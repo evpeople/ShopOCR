@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    // ...
+    "types": ["vue3-baidu-map-gl/volar"]
+  }
+}

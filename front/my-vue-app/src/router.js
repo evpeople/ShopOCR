@@ -10,6 +10,7 @@ const BoardAdmin = () => import('./components/BoardAdmin.vue')
 const BoardModerator = () => import('./components/BoardModerator.vue')
 const BoardUser = () => import('./components/BoardUser.vue')
 const Upload = () => import('./components/Upload.vue')
+const Map = () => import('./components/Baidu.vue')
 
 const routes = [
   {
@@ -59,6 +60,12 @@ const routes = [
     // lazy-loaded
     component: BoardUser,
   },
+  {
+    path: '/map',
+    name: 'name',
+    // lazy-loaded
+    component: Map,
+  }
 ];
 
 const router = createRouter({
