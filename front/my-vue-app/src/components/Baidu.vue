@@ -3,29 +3,26 @@
     <BMap v-bind="$attrs" enableScrollWheelZoom ref="map" :center="point" @initd="handleInitd" @click="handleClick"
       mapStyleId="0f3219e982947931ae2893345940df80">
       <!-- <div v-if="!isLoading && !isEmpty"> -->
-      <div>
-        <BMarker :position="point" enableClicking @click="handleClick2">
-        </BMarker>
-        <BInfoWindow v-show="show2" :position="point" title="result?.address" enableAutoPan enableCloseOnClick>
-          <h2>天安门</h2>
-          <div class="infoWindow-content">
-            <p>
-              {{ result?.address }}
-            </p>
-            <img width="139" height="104" ref="imgP" alt="rfdfs" />
-          </div>
-        </BInfoWindow>
-        <!-- <BLabel
+      <BMarker :position="point" enableClicking @click="handleClick2">
+      </BMarker>
+      <BInfoWindow v-model="show2" :position="point" title="dashabi" enableAutoPan>
+        <h2>天安门</h2>
+        <div class="infoWindow-content">
+          <p>
+            {{ result?.address }}
+          </p>
+          <img width="139" height="104" ref="imgP" alt="rfdfs" />
+        </div>
+      </BInfoWindow>
+      <!-- <BLabel
           style="color: #333; font-size: 9px"
           :position="result.point"
           :content="`地址: ${result?.address} 所属商圈:${result?.business} 最匹配地点: ${
             result?.surroundingPois[0]?.title || '无'
           }`"
         /> -->
-        <!-- <BInfoWindow v-model="show2" :position="result.point" title="图文组合排版">
+      <!-- <BInfoWindow v-model="show2" :position="result.point" title="图文组合排版">
       </BInfoWindow> -->
-      </div>
-      <img width="139" height="104" ref="imgP3" alt="rfdfs" />
     </BMap>
   </div>
 </template>
