@@ -2,7 +2,8 @@
   <div>
     <BMap v-bind="$attrs" enableScrollWheelZoom ref="map" :center="point" @initd="handleInitd" @click="handleClick"
       mapStyleId="0f3219e982947931ae2893345940df80">
-      <template v-if="!isLoading && !isEmpty">
+      <!-- <div v-if="!isLoading && !isEmpty"> -->
+      <div>
         <BMarker :position="point" enableClicking @click="handleClick2">
         </BMarker>
         <BInfoWindow v-show="show2" :position="point" title="result?.address" enableAutoPan enableCloseOnClick>
@@ -23,7 +24,8 @@
         /> -->
         <!-- <BInfoWindow v-model="show2" :position="result.point" title="图文组合排版">
       </BInfoWindow> -->
-      </template>
+      </div>
+      <img width="139" height="104" ref="imgP3" alt="rfdfs" />
     </BMap>
   </div>
 </template>
@@ -39,7 +41,7 @@ export default defineComponent({
   setup(props, context) {
     // 在这里声明数据，或者编写函数并在这里执行它
     const map = ref()
-    const imgP = ref()
+    const imgP = ref<HTMLImageElement>()
     const { get, result, isLoading, isEmpty } = usePointGeocoder<PointGeocoderResult>()
     const point = ref({ lng: 116.30793520652882, lat: 40.05861561613348 })
     const markerPoint = point
@@ -48,12 +50,11 @@ export default defineComponent({
     const lastBaseURL = "&fov=180&ak=Np5CcMkThnumd5L4MpQ01LjMxvrjUyxr"
     var imgURL = ""
     var d = "ds"
-    // onMounted(() => {
-    //   console.log("before", imgP.value.alt);
-    //   imgP.value.src = imgURL
-    //   imgP.value.alt = d
-    //   console.log(imgP.value.alt);
-    // })
+    onMounted(() => {
+      imgP.value.alt = "dsadasdasadsa"
+      console.log(imgP.value);
+
+    })
     function handleInitd() {
       get(point.value)
     }
@@ -86,6 +87,10 @@ export default defineComponent({
 
       imgURL = imgBASEURL + e.latlng.lng + "," + e.latlng.lat + lastBaseURL
 
+      console.log("before", imgP.value.alt);
+      imgP.value.src = imgURL
+      imgP.value.alt = d
+      console.log(imgP.value.alt);
 
       console.log(imgURL);
 
