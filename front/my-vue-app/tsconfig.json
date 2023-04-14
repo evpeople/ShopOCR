@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     // ...
-    "types": ["vue3-baidu-map-gl/volar"]
-  }
+    "types": ["vue3-baidu-map-gl/volar"],
+    "allowJs": true,
+  },
+  
 }

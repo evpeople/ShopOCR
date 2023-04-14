@@ -11,6 +11,8 @@ const BoardModerator = () => import('./components/BoardModerator.vue')
 const BoardUser = () => import('./components/BoardUser.vue')
 const Upload = () => import('./components/Upload.vue')
 const Map = () => import('./components/Baidu.vue')
+const Map2 = () => import('./components/Baidu2.vue')
+const Map3 = () => import('./components/Baidu3.vue')
 
 const routes = [
   {
@@ -61,10 +63,22 @@ const routes = [
     component: BoardUser,
   },
   {
-    path: '/map',
+    path: '/oldmap',
     name: 'name',
     // lazy-loaded
     component: Map,
+  },
+  {
+    path: '/map2',
+    name: 'name2',
+    // lazy-loaded
+    component: Map2,
+  },
+  {
+    path: '/map3',
+    name: 'name3',
+    // lazy-loaded
+    component: Map3,
   }
 ];
 
