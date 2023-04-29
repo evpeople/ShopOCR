@@ -14,6 +14,18 @@ const Map = () => import('./components/Baidu.vue')
 const Map2 = () => import('./components/Baidu2.vue')
 const Map3 = () => import('./components/Baidu3.vue')
 
+import HomePage from '@/pages/HomePage.vue'
+import UserPage from '@/pages/UserPage.vue'
+import OwnDetailsPage from '@/pages/OwnDetailsPage.vue'
+import SeekMainPage from '@/pages/SeekMainPage.vue'
+import RegisterPage from '@/pages/RegisterPage.vue'
+import SeekItemDetails from '@/pages/SeekItemDetails.vue'
+import StatisticPage from '@/pages/Statistic.vue'
+import BlankPage from '@/pages/Blank.vue'
+
+import DetailsSeek from '@/components/DetailsSeek.vue'
+import DetailsOffer from '@/components/DetailsOffer.vue'
+
 const routes = [
   {
     path: '/',

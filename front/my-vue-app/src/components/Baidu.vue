@@ -12,6 +12,7 @@
             {{ result?.address }}
           </p>
           <img width="139" height="104" ref="imgP" alt="rfdfs" />
+          <img width="139" height="104" ref="imgP" alt="rfdfs" />
         </div>
       </BInfoWindow>
       <!-- <BLabel
